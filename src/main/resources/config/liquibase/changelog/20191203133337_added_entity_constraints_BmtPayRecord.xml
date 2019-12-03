@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity BmtPayRecord.
+    -->
+    <changeSet id="20191203133337-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="bmt_chang_ci_id"
+                                 baseTableName="bmt_pay_record"
+                                 constraintName="fk_bmt_pay_record_bmt_chang_ci_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bmt_chang_ci"/>
+
+    </changeSet>
+</databaseChangeLog>

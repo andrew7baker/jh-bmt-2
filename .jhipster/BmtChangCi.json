@@ -1,0 +1,57 @@
+{
+    "name": "BmtChangCi",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "weekDay",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "timeBegin",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "timeEnd",
+            "fieldType": "Instant"
+        },
+        {
+            "fieldName": "owner",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "userId",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "bmtChangCi",
+            "relationshipName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "bmtPayRecord",
+            "otherEntityRelationshipName": "bmtChangCi",
+            "relationshipName": "bmtPayRecord"
+        }
+    ],
+    "changelogDate": "20191203133336",
+    "entityTableName": "bmt_chang_ci",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "bmt",
+    "applications": "*",
+    "angularJSSuffix": "mySuffix",
+    "microserviceName": "bmt"
+}
