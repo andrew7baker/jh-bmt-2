@@ -1,0 +1,33 @@
+// 场次 如:2号场周四
+entity BmtChangCi {
+	name String,
+    weekDay String,
+    timeBegin Instant,
+    timeEnd Instant,
+    owner String,
+    userId Long
+}
+
+// 支付流水
+entity BmtPayRecord {
+    payTime Instant,
+    payPersonId String,
+    payPersonName String,
+    payAmount Long
+}
+
+
+relationship OneToMany {
+	BmtChangCi{bmtPayRecord} to BmtPayRecord
+}
+
+relationship OneToOne {
+	BmtChangCi{user} to User
+}
+
+paginate BmtChangCi,BmtPayRecord with pagination
+
+// Set service options to all except few
+service all with serviceImpl
+// Set an angular suffix
+angularSuffix * with mySuffix
