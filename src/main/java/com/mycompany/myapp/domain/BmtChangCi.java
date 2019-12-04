@@ -35,12 +35,8 @@ public class BmtChangCi implements Serializable {
     @Column(name = "owner")
     private String owner;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
+    @Column(name = "user_id")
     private Long userId;
-
-    @OneToOne
-    @JoinColumn(unique = true)
-    private User user;
 
     @OneToMany(mappedBy = "bmtChangCi")
     private Set<BmtPayRecord> bmtPayRecords = new HashSet<>();
@@ -130,19 +126,6 @@ public class BmtChangCi implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public BmtChangCi user(User user) {
-        this.user = user;
-        return this;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Set<BmtPayRecord> getBmtPayRecords() {
