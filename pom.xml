@@ -350,6 +350,18 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <!--添加热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+            <scope>true</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -503,6 +515,15 @@
                 </executions>
             </plugin>
             <!-- jhipster-needle-maven-add-plugin -->
+            <plugin>
+                <!--热部署配置-->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!--fork:如果没有该项配置,整个devtools不会起作用-->
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>

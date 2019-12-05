@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.jdbi.v3.core.Jdbi;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.List;
 
 import java.text.MessageFormat;
@@ -129,7 +130,8 @@ public class BmtChangCiReportResource {
             System.out.println(MessageFormat.format("Connecting to ftp host: {0} on port: {1}",
                 FTP_HOST, FTP_PORT));
             ftp.connect(FTP_HOST, FTP_PORT);
-            ftp.login(FTP_USER, FTP_PASS);
+            boolean success =ftp.login(FTP_USER, FTP_PASS);
+            System.out.println(MessageFormat.format("success {0} ", success));
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
                 throw new RuntimeException("Cannot connect to FTP_HOST: " + FTP_HOST);
             }
@@ -139,10 +141,13 @@ public class BmtChangCiReportResource {
 //            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
             int replyCode = ftp.getReplyCode();
             System.out.println(MessageFormat.format("返回 {0} ", replyCode));
-            log.info("replyCode="+replyCode);
-            boolean success = ftp.login(FTP_USER, FTP_PASS);
-
             FTPFile[] files = ftp.listFiles();
+            System.out.println("files="+ Arrays.toString(files));
+
+
+            System.out.println("replyCode="+replyCode);
+
+
 
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
                 throw new RuntimeException("Cannot change to FTP directory: " + FTP_REMOTE_DIRECTORY);
