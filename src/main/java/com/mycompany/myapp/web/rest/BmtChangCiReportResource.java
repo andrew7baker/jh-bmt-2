@@ -70,7 +70,7 @@ public class BmtChangCiReportResource {
         String FTP_USER  = "your_username";
         String FTP_PASS = "your_password";
         String FTP_REMOTE_DIRECTORY = "/2-yimi";
-        String FTP_LOCAL_DOWNLOAD_DIR = ".";
+        String FTP_LOCAL_DOWNLOAD_DIR = "d:/download/";
 
         List<String> list =jdbi.withHandle(handle ->
             handle.createQuery("select value from SYS_CONFIG where code = ?")
@@ -89,8 +89,20 @@ public class BmtChangCiReportResource {
                 .list());
         log.info("list="+list);
         if(list.size()>0){
-            FTP_PASS = list.get(0);
+            FTP_PASS = "xzmF0KHCBhYyeKH";
         }
+
+        list =jdbi.withHandle(handle ->
+            handle.createQuery("select value from SYS_CONFIG where code = ?")
+                .bind(0, "FTP_DIR")
+                .mapTo(String.class)
+                .list());
+        log.info("list="+list);
+        if(list.size()>0){
+            FTP_REMOTE_DIRECTORY = list.get(0);
+        }
+
+
 
         list =jdbi.withHandle(handle ->
             handle.createQuery("select value from SYS_CONFIG where code = ?")
@@ -109,7 +121,15 @@ public class BmtChangCiReportResource {
         try {
             ftp = new FTPHTTPClient(FTP_HOST , FTP_PORT, FTP_USER , FTP_PASS);
             log.info("ftp="+ftp);
-            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
+
+//            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
+            int replyCode = ftp.getReplyCode();
+            System.out.println(MessageFormat.format("返回 {0} ", replyCode));
+            log.info("replyCode="+replyCode);
+            boolean success = ftp.login(FTP_USER, FTP_PASS);
+
+            FTPFile[] files = ftp.listFiles();
+
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
                 throw new RuntimeException("Cannot change to FTP directory: " + FTP_REMOTE_DIRECTORY);
             }
