@@ -117,9 +117,23 @@ public class BmtChangCiReportResource {
 
 //  https://gist.github.com/nabil-hassan/7e7c6700eee628a7c491
         FTPClient ftp = new FTPClient();
-
+        PrintWriter writer = new PrintWriter(System.out);
         try {
             ftp = new FTPHTTPClient(FTP_HOST , FTP_PORT, FTP_USER , FTP_PASS);
+            // Redirect FTP commands to stdout if flag set.
+//            if (FTP_PROTOCOL_DEBUGGING) {
+//                ftp.addProtocolCommandListener(new PrintCommandListener(writer));
+//            }
+
+            // Connect/login.
+            System.out.println(MessageFormat.format("Connecting to ftp host: {0} on port: {1}",
+                FTP_HOST, FTP_PORT));
+            ftp.connect(FTP_HOST, FTP_PORT);
+            ftp.login(FTP_USER, FTP_PASS);
+            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                throw new RuntimeException("Cannot connect to FTP_HOST: " + FTP_HOST);
+            }
+
             log.info("ftp="+ftp);
 
 //            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
