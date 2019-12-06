@@ -70,7 +70,7 @@ public class BmtChangCiReportResource {
         int FTP_PORT = 21;
         String FTP_USER  = "your_username";
         String FTP_PASS = "your_password";
-        String FTP_REMOTE_DIRECTORY = "/2-yimi";
+        String FTP_REMOTE_DIRECTORY = "/";
         String FTP_LOCAL_DOWNLOAD_DIR = "d:/download/";
 
         List<String> list =jdbi.withHandle(handle ->
@@ -78,49 +78,34 @@ public class BmtChangCiReportResource {
                 .bind(0, "FTP_USER")
                 .mapTo(String.class)
                 .list());
-        log.info("list="+list);
-        if(list.size()>0){
-            FTP_USER  = list.get(0);
-        }
+        FTP_USER  = list.size()>0?list.get(0):"";
 
         list =jdbi.withHandle(handle ->
             handle.createQuery("select value from SYS_CONFIG where code = ?")
                 .bind(0, "FTP_PASS")
                 .mapTo(String.class)
                 .list());
-        log.info("list="+list);
-        if(list.size()>0){
-            FTP_PASS = "xzmF0KHCBhYyeKH";
-        }
+        FTP_PASS  = list.size()>0?list.get(0):"";
 
         list =jdbi.withHandle(handle ->
             handle.createQuery("select value from SYS_CONFIG where code = ?")
-                .bind(0, "FTP_DIR")
+                .bind(0, "FTP_REMOTE_DIRECTORY")
                 .mapTo(String.class)
                 .list());
-        log.info("list="+list);
-        if(list.size()>0){
-            FTP_REMOTE_DIRECTORY = list.get(0);
-        }
-
-
+        FTP_REMOTE_DIRECTORY  = list.size()>0?list.get(0):"";
 
         list =jdbi.withHandle(handle ->
             handle.createQuery("select value from SYS_CONFIG where code = ?")
                 .bind(0, "FTP_HOST")
                 .mapTo(String.class)
                 .list());
-        log.info("list="+list);
-        if(list.size()>0){
-            FTP_HOST = list.get(0);
-        }
-
+        FTP_HOST  = list.size()>0?list.get(0):"";
 
 //  https://gist.github.com/nabil-hassan/7e7c6700eee628a7c491
         FTPClient ftp = new FTPClient();
         PrintWriter writer = new PrintWriter(System.out);
         try {
-            ftp = new FTPHTTPClient(FTP_HOST , FTP_PORT, FTP_USER , FTP_PASS);
+//            ftp = new FTPHTTPClient(FTP_HOST , FTP_PORT, FTP_USER , FTP_PASS);
             // Redirect FTP commands to stdout if flag set.
 //            if (FTP_PROTOCOL_DEBUGGING) {
 //                ftp.addProtocolCommandListener(new PrintCommandListener(writer));
@@ -131,27 +116,17 @@ public class BmtChangCiReportResource {
                 FTP_HOST, FTP_PORT));
             ftp.connect(FTP_HOST, FTP_PORT);
             boolean success =ftp.login(FTP_USER, FTP_PASS);
-            System.out.println(MessageFormat.format("success {0} ", success));
+            log.info("\n 连接返回 {}", success);
             if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                throw new RuntimeException("Cannot connect to FTP_HOST: " + FTP_HOST);
+                throw new RuntimeException("不能连接主机 ====== " + FTP_HOST);
             }
-
-            log.info("ftp="+ftp);
-
-//            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
+            ftp.changeWorkingDirectory(FTP_REMOTE_DIRECTORY);
+            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
+                throw new RuntimeException("不能改变FTP目录 ====== " + FTP_REMOTE_DIRECTORY);
+            }
             int replyCode = ftp.getReplyCode();
-            System.out.println(MessageFormat.format("返回 {0} ", replyCode));
             FTPFile[] files = ftp.listFiles();
             System.out.println("files="+ Arrays.toString(files));
-
-
-            System.out.println("replyCode="+replyCode);
-
-
-
-            if (!FTPReply.isPositiveCompletion(ftp.getReplyCode())) {
-                throw new RuntimeException("Cannot change to FTP directory: " + FTP_REMOTE_DIRECTORY);
-            }
 
             // Iteratively download all files in the directory.
             for (FTPFile file : ftp.listFiles()) {
@@ -172,18 +147,16 @@ public class BmtChangCiReportResource {
             // Calculate time taken
             long endTimeMillis = System.currentTimeMillis();
             long totalTimemillis = endTimeMillis - startTimeMillis;
-            System.out.println(MessageFormat.format("Upload process took {0} ms", totalTimemillis));
+            log.debug("\n FTP耗时: {}  ", totalTimemillis);
             try {
                 if (ftp.isConnected()) {
                     ftp.logout();
                     ftp.disconnect();
                 }
-
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-
         return "bmtReportResource";
     }
 
