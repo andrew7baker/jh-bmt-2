@@ -158,23 +158,25 @@ public class BmtChangCiReportResource {
     public String bmtGetReport() {
         Map<String, Object> data = new HashMap<String, Object>();
 
-        data.put("date", new Date());
-//        data.put("email", "accountwcx@qq.com");
-//        data.put("age", 30);
-//        data.put("name", "csdn");
-//        data.put("array", new int[]{1,2,3,4});
         Map<String, Object> data1 = new HashMap<String, Object>();
         data1.put("changDiName","2号场地周四");
 
+        Map<String, Object> payChangCi1 = new HashMap<String, Object>();
+        payChangCi1.put("changCiName","12月19日");
+
+        Map<String, Object> payRecord = new HashMap<String, Object>();
+        payRecord.put("payPersonName","93社员");
+        payRecord.put("payAmount","35");
+        Map<String, Object> payRecord1 = new HashMap<String, Object>();
+        payRecord1.put("payPersonName","老李");
+        payRecord1.put("payAmount","35");
+        payChangCi1.put("payRecords",new Object[]{payRecord,payRecord1});
+        data1.put("payChangCis",new Object[]{payChangCi1});
+
         Map<String, Object> data2 = new HashMap<String, Object>();
         data2.put("changDiName","5号场地周日");
-
         data.put("payChangDis",new Object[]{data1,data2});
-
-
-
         String s = JSON.toJSONString(data);
-
         return s;
     }
 
