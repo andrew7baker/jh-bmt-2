@@ -2,7 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.mycompany.myapp.util.ResponseJsonUtils;
+//import com.mycompany.myapp.util.ResponseJsonUtils;
 import org.apache.commons.net.ftp.*;
 import org.jdbi.v3.core.Handle;
 import org.slf4j.Logger;
@@ -41,15 +41,7 @@ public class BmtChangCiReportResource {
 
         String jsonStr = "[{\"JACKIE_ZHANG\":\"张学友\"},{\"ANDY_LAU\":\"刘德华\"},{\"LIMING\":\"黎明\"},{\"Aaron_Kwok\":\"郭富城\"}]" ;
         //做5次测试
-        for(int i=0,j=5;i<j;i++)
-        {
-            JSONArray jsonArray = JSONArray.parseArray(jsonStr);
 
-            for(int k=0;k<jsonArray.size();k++){
-                System.out.print(jsonArray.get(k) + "\t");
-            }
-
-        }
 
         try (FileWriter file = new FileWriter("payReport.json")) {
 
